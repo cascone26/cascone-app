@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { familyMembers, getMember } from "@/data/family";
 import { NoteBoard } from "@/components/NoteBoard";
+import { Notepad } from "@/components/Notepad";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -107,6 +108,13 @@ export default async function MemberPage({
               </div>
             ))}
           </div>
+        </section>
+      )}
+
+      {/* Notepad — Jacob only */}
+      {member.slug === "jacob" && (
+        <section className="mb-8 fade-in-up fade-in-up-delay-5">
+          <Notepad />
         </section>
       )}
 
