@@ -21,7 +21,7 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Fetch: network-first with cache fallback
+// Fetch: network-first with cache fallback and timeout
 self.addEventListener("fetch", (event) => {
   // Only handle GET requests
   if (event.request.method !== "GET") return;
@@ -30,7 +30,12 @@ self.addEventListener("fetch", (event) => {
   if (!event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
-    fetch(event.request)
+    Promise.race([
+      fetch(event.request),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Fetch timeout")), 30000)
+      )
+    ])
       .then((response) => {
         // Cache successful responses
         if (response.ok) {
